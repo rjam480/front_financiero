@@ -1,0 +1,286 @@
+<div class="container my-5">
+    <!-- Título principal -->
+    <h2 class="text-primary text-center mb-4">Información del Prestador</h2>
+    
+    <!-- Tabla de información del prestador -->
+    <div class="card-body">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th scope="row">NIT PRESTADOR:</th>
+                <td>800084362</td>
+                <th scope="row">Nombre:</th>
+                <td>E.S.E. HOSPITAL CIVIL DE IPIALES</td>
+            </tr>
+            <tr>
+                <th scope="row">TIPO PRESTADOR:</th>
+                <td>Publica</td>
+                <th scope="row">ZONAL:</th>
+                <td>NARIÑO</td>
+            </tr>
+            <tr>
+                <th scope="row">RED:</th>
+                <td>RED S Y C</td>
+                <th scope="row">GIRO ADRES:</th>
+                <td>SI</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <!-- Promedio Radicación -->
+    <h3 class="text-secondary">Promedio Radicación</h3>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>CXP</th>
+                <th>En Procesamiento</th>
+                <th>Glosas</th>
+                <th>Devoluciones</th>
+                <th>Total Cartera</th>
+                <th>Giros Mes Actual</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ promedioRadicacion.cxp }}</td>
+                <td>{{ promedioRadicacion.enProcesamiento }}</td>
+                <td>{{ promedioRadicacion.glosas }}</td>
+                <td>{{ promedioRadicacion.devoluciones }}</td>
+                <td>{{ promedioRadicacion.totalCartera }}</td>
+                <td>{{ promedioRadicacion.girosMesActual }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-muted text-center"><em>Cifras en millones de pesos</em></p>
+
+    <!-- Detalles de Radicación -->
+    <h3 class="text-secondary">Detalles de Radicación</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Mes 1</th>
+                        <th>Mes 2</th>
+                        <th>Mes 3</th>
+                        <th>Mes 4</th>
+                        <th>Mes 5</th>
+                        <th>Mes 6</th>
+                        <th>Mes 7</th>
+                        <th>Mes 8</th>
+                        <th>Mes 9</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CORRIENTE</td>
+                        <td>0</td>
+                        <td>559</td>
+                        <td>786</td>
+                        <td>1.320</td>
+                        <td>831</td>
+                        <td>803</td>
+                        <td>551</td>
+                        <td>50</td>
+                        <td>429</td>
+                    </tr>
+                    <tr>
+                        <td>SIN IDENTIFICAR</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>8</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>139</td>
+                        <td>913</td>
+                        <td>0</td>
+                        <td>670</td>
+                    </tr>
+                    <tr>
+                        <td>ANTERIOR</td>
+                        <td>1.233</td>
+                        <td>439</td>
+                        <td>66</td>
+                        <td>931</td>
+                        <td>357</td>
+                        <td>39</td>
+                        <td>439</td>
+                        <td>21</td>
+                        <td>14</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>TOTAL 2024</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>RADICACION</td>
+                        <td>10.607</td>
+                    </tr>
+                    <tr>
+                        <td>PRESTACION</td>
+                        <td>7.067</td>
+                    </tr>
+                    <tr>
+                        <td>GIROS</td>
+                        <td>5.780</td>
+                    </tr>
+                    <tr>
+                        <td>% GIRO</td>
+                        <td>82%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Otra sección de detalles -->
+    <h3 class="text-secondary">Detalles de Radicación</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>TOTAL CORRIENTE</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>8</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>139</td>
+                        <td>913</td>
+                        <td>0</td>
+                        <td>670</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL RADICACION</td>
+                        <td>1.233</td>
+                        <td>439</td>
+                        <td>66</td>
+                        <td>931</td>
+                        <td>357</td>
+                        <td>39</td>
+                        <td>439</td>
+                        <td>21</td>
+                        <td>14</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th rowspan="2" >INTERVENCION MES</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>RADICACION</td>
+                        <td>10.607</td>
+                    </tr>
+                    <tr>
+                        <td>PRESTACION</td>
+                        <td>7.067</td>
+                    </tr>
+                    <tr>
+                        <td>GIROS</td>
+                        <td>5.780</td>
+                    </tr>
+                    <tr>
+                        <td>% GIRO</td>
+                        <td>82%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Última sección de detalles -->
+    <h3 class="text-secondary">Detalles de Radicación</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>GIROS</td>
+                        <td>0</td>
+                        <td>559</td>
+                        <td>786</td>
+                        <td>1.320</td>
+                        <td>831</td>
+                        <td>803</td>
+                        <td>551</td>
+                        <td>50</td>
+                        <td>429</td>
+                    </tr>
+                    <tr>
+                        <td>% CORRIENTE</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>8</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>139</td>
+                        <td>913</td>
+                        <td>0</td>
+                        <td>670</td>
+                    </tr>
+                    <tr>
+                        <td>% RADICACION</td>
+                        <td>1.233</td>
+                        <td>439</td>
+                        <td>66</td>
+                        <td>931</td>
+                        <td>357</td>
+                        <td>39</td>
+                        <td>439</td>
+                        <td>21</td>
+                        <td>14</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Detalles</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TOTAL CORRIENTE</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL RADICACION</td>
+                        <td>10.607</td>
+                    </tr>
+                    <tr>
+                        <td>PRESTACION</td>
+                        <td>7.067</td>
+                    </tr>
+                    <tr>
+                        <td>GIROS</td>
+                        <td>5.780</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
