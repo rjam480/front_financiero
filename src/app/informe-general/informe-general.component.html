@@ -1,29 +1,35 @@
 <div class="container my-5 ">
     <!-- Título principal -->
+
+    <div class="row mb-4">
+        <div class="col text-end"> <!-- Clase 'text-end' para alinear a la derecha -->
+            <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </div>
     <h2 class="text-primary text-center mb-4">Información del Prestador</h2>
     <!-- Sección de búsqueda -->
-    <div class="row mb-4">
+    <div class="row mb-4" *ngIf="isAdmin">
         <div class="col-md-12 text-center">
-            <form #formPrestador="ngForm"  (ngSubmit)="ConsultarData(prestadorInput.value)">
-            <label for="prestadorInput" class="form-label">Prestador</label>
-            <div class="input-group mb-3">
-                <input type="text" id="prestadorInput" #prestadorInput class="form-control"
-                    placeholder="Buscar Prestador..." aria-label="Buscar Prestador" required>
-                <button class="btn btn-primary" type="submit" [disabled]="formPrestador.invalid">Buscar</button>
-            </div>
+            <form #formPrestador="ngForm" (ngSubmit)="ConsultarData(prestadorInput.value)">
+                <label for="prestadorInput" class="form-label">Prestador</label>
+                <div class="input-group mb-3">
+                    <input type="text" id="prestadorInput" #prestadorInput class="form-control"
+                        placeholder="Buscar Prestador..." aria-label="Buscar Prestador" required>
+                    <button class="btn btn-primary" type="submit" [disabled]="formPrestador.invalid">Buscar</button>
+                </div>
             </form>
         </div>
     </div>
 
-
-    <!-- Tabla de información del prestador -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Información prestador</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive mb-4 ">
-                <!-- 
+    <div *ngIf="isview">
+        <!-- Tabla de información del prestador -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Información prestador' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mb-4 ">
+                    <!-- 
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
                         <tr>
@@ -47,80 +53,84 @@
                     </tbody>
                 </table>
                 -->
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">NIT PRESTADOR</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">ZONAL</th>
-                            <th scope="col">RED</th>
-                            <th scope="col">GIRO ADRES</th>
-                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ cabecera[0].nit }}</td>
-                            <td>{{ cabecera[0].razon_social }}</td>
-                            <td>{{ cabecera[0].zonal }}</td>
-                            <td>{{ cabecera[0].red }}</td>
-                            <td>{{ cabecera[0].habitacion }}</td>
-                        
-                        </tr>
-                    </tbody>
-                </table>
-                
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nit prestador</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Zonal</th>
+                                <th scope="col">Red</th>
+                                <th scope="col">Giro adres</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ cabecera[0].nit }}</td>
+                                <td>{{ cabecera[0].razon_social }}</td>
+                                <td>{{ cabecera[0].zonal }}</td>
+                                <td>{{ cabecera[0].red }}</td>
+                                <td>{{ cabecera[0].habitacion }}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Radicación vs giros</h6>
-        </div>
-        <div class="card-body" style="display: block;">
-            <canvas id="myChart"></canvas>
-        </div>
-    </div>
-    <!-- Promedio Radicación -->
+        <!-- Promedio Radicación -->
+        <p class="text-muted text-center"><em>Información contable de la Nueva EPS sujeta a validación y auditoria</em>
+        </p>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Estado de cuenta' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Promedio de radicación mes ( {{currentYear}} )</th>
+                                <th>Saldo contable</th>
+                                <th>Facturas en Procesamiento</th>
+                                <th>Glosas</th>
+                                <th>Devoluciones</th>
+                                <th>Cartera estimada </th>
+                                <th>Giros en el mes actual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="alinearDerecha">{{ cabecera[0].promedio_radicacion | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha">{{ cabecera[0].cxp | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha"> {{ cabecera[0].en_proceso | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha">{{ cabecera[0].glosas | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha">{{ cabecera[0].devolucion | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha">{{ cabecera[0].total_cartera | number:'1.0-0' }}</td>
+                                <td class="alinearDerecha">{{ cabecera[0].giro_mes_actual | number:'1.0-0' }}</td>
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Total general</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive mb-4">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Promedio de radicación</th>
-                            <th>CXP</th>
-                            <th>En Procesamiento</th>
-                            <th>Glosas</th>
-                            <th>Devoluciones</th>
-                            <th>Total Cartera</th>
-                            <th>Giros Mes Actual</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ cabecera[0].promedio_radicacion}}</td>
-                            <td>{{ cabecera[0].cxp }}</td>
-                            <td>{{ cabecera[0].en_proceso}}</td>
-                            <td>{{ cabecera[0].glosas}}</td>
-                            <td>{{ cabecera[0].devolucion }}</td>
-                            <td>{{ cabecera[0].total_cartera}}</td>
-                            <td>{{ cabecera[0].giro_mes_actual}}</td>
-                          
-                        </tr>
-                    </tbody>
-                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <p class="text-muted text-center"><em>Cifras en millones de pesos</em></p>
 
-    <!-- Detalles de Radicación 
-    <h3 class="text-secondary">Detalles de Radicación</h3>-->
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Radicación vs giros' | uppercase }}</h6>
+            </div>
+            <div class="card-body" style="display: block;">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+        <p class="text-muted text-center"><em>Cifras en millones de pesos</em></p>
+
+        <!-- Detalles de Radicación 
+    <h3 class="text-secondary">Detalles de Radicación</h3>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Radicacion (clasificación)</h6>
@@ -186,146 +196,282 @@
             </div>
         </div>
     </div>
-
-    <!-- Otra sección de detalles 
+-->
+        <!-- Otra sección de detalles 
     <h3 class="text-secondary">Detalles de Radicación</h3>-->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Total Pagos</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Descripción</th>
-                                    <th>Enero</th>
-                                    <th>Febrero</th>
-                                    <th>Marzo</th>
-                                    <th>Abril</th>
-                                    <th>Mayo</th>
-                                    <th>Junio</th>
-                                    <th>Julio</th>
-                                    <th>Agosto</th>
-                                    <th>Septiembre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of segundaSeccion">
-                                    <td>{{ item.Clasificacion }}</td>
-                                    <td>{{ item.ENE | number:'1.0-0'  }}</td>
-                                    <td>{{ item.FEB | number:'1.0-0' }}</td>
-                                    <td>{{ item.MAR | number:'1.0-0' }}</td>
-                                    <td>{{ item.ABR | number:'1.0-0' }}</td>
-                                    <td>{{ item.MAY | number:'1.0-0' }}</td>
-                                    <td>{{ item.JUN | number:'1.0-0' }}</td>
-                                    <td>{{ item.JUL | number:'1.0-0' }}</td>
-                                    <td>{{ item.AGO | number:'1.0-0'  }}</td>
-                                    <td>{{ item.SEP | number:'1.0-0'  }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Comportamiento Radicación vs Giros' | uppercase }}</h6>
+            </div>
 
-                <div class="col-md-3">
-                    <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th colspan="2" class="text-center">PERIODO DE INTERVENCION</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of keys2024">
-                                    <td>{{ item.label }}</td>
-                                    <td>
-                                        {{ intervencionMes[0][item.key] | number:'1.0-0' }}{{ item.key ===
-                                        'porcentaje_giros' ? '%' : '' }}
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                  <tr>
+                                    <th class="sticky-column" >Descripción</th>
+                                    <th *ngFor="let month of meses; let i = index" [hidden]="!shouldShowMonth(i)">
+                                      {{ month.label }}
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <!-- Primera sección -->
+                                  <tr *ngFor="let item of primeraSeccion">
+                                    <td  class="sticky-column" [ngStyle]="{'background-color': getColorByLabel(item.Clasificacion)?.color}">
+                                      {{ getClasificacionLabel(item.Clasificacion) | uppercase }}
                                     </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    <td *ngFor="let month of meses; let i = index" 
+                                        class="alinearDerecha" 
+                                        [hidden]="!shouldShowMonth(i)">
+                                      {{ item[month.key] | number:'1.0-0' }}
+                                    </td>
+                                  </tr>
+                              
+                                  <!-- Segunda sección -->
+                                  <tr *ngFor="let item of segundaSeccion">
+                                    <td class="sticky-column">{{  getClasificacionLabel(item.Clasificacion)  | uppercase }}</td>
+                                    <td *ngFor="let month of meses; let i = index" 
+                                        class="alinearDerecha" 
+                                        [hidden]="!shouldShowMonth(i)">
+                                      {{ item[month.key] | number:'1.0-0' }}
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th colspan="2" class="text-center">TOTAL {{ currentYear }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of keys2024">
+                                        <td>{{ item.label }} {{ currentYear }}</td>
+                                        <td class="alinearDerecha">
+                                            {{ total2024[0][item.key] | number:'1.0-0' }}{{ item.key ===
+                                            'porcentaje_giros'
+                                            ? '%' : '' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th colspan="2" class="text-center">{{'PERIODO DE INTERVENCION' | uppercase }}
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of keys2024">
+                                        <td>{{ item.label }} INTERVENCION</td>
+                                        <td class="alinearDerecha">
+                                            {{ intervencionMes[0][item.key] | number:'1.0-0' }}{{ item.key ===
+                                            'porcentaje_giros' ? '%' : '' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Última sección de detalles 
+    <h3 class="text-secondary">Detalles de Radicación</h3>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Porcentaje de ejecución' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Enero</th>
+                                        <th>Febrero</th>
+                                        <th>Marzo</th>
+                                        <th>Abril</th>
+                                        <th>Mayo</th>
+                                        <th>Junio</th>
+                                        <th>Julio</th>
+                                        <th>Agosto</th>
+                                        <th>Septiembre</th>
+                                        <th>Octubre</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of terceraSeccion">
+                                        <td>{{ item.Clasificacion }}</td>
+                                        <td class="alinearDerecha">{{ item.ENE | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.FEB | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.MAR | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.ABR | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.MAY | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.JUN | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.JUL | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.AGO | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.SEP | number:'1.0-2' }}%</td>
+                                        <td class="alinearDerecha">{{ item.OCT | number:'1.0-2' }}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Última sección de detalles 
-    <h3 class="text-secondary">Detalles de Radicación</h3>-->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Giros</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Descripción</th>
-                                    <th>Enero</th>
-                                    <th>Febrero</th>
-                                    <th>Marzo</th>
-                                    <th>Abril</th>
-                                    <th>Mayo</th>
-                                    <th>Junio</th>
-                                    <th>Julio</th>
-                                    <th>Agosto</th>
-                                    <th>Septiembre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of terceraSeccion">
-                                    <td>{{ item.Clasificacion }}</td>
-                                    <td>{{ item.ENE | number:'1.0-2' }}</td>
-                                    <td>{{ item.FEB | number:'1.0-2' }}</td>
-                                    <td>{{ item.MAR | number:'1.0-2' }}</td>
-                                    <td>{{ item.ABR | number:'1.0-2' }}</td>
-                                    <td>{{ item.MAY | number:'1.0-2' }}</td>
-                                    <td>{{ item.JUN | number:'1.0-2' }}</td>
-                                    <td>{{ item.JUL | number:'1.0-2' }}</td>
-                                    <td>{{ item.AGO | number:'1.0-2' }}</td>
-                                    <td>{{ item.SEP | number:'1.0-2' }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+-->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Proyección de giros' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                  <tr>
+                                    <!-- Usar getLabel para mostrar las etiquetas en lugar de las claves -->
+                                    <th *ngFor="let key of getKeys(proyeccionGiros[0])">{{ getLabel(key) }}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let row of proyeccionGiros">
+                                    <td class="alinearDerecha" *ngFor="let key of getKeys(row)">{{ row[key] | number:'1.0-0' }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </div>
                     </div>
                 </div>
-<!-- 
-                <div class="col-md-3">
-                    <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th colspan="2" class="text-center">Simulacion</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>PAGO A 80%
-                                    </td>
-                                    <td>10.607</td>
-                                </tr>
-                                <tr>
-                                    <td>PAGO A 90%
-                                    </td>
-                                    <td>7.067</td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                -->
             </div>
         </div>
+        <p class="text-muted text-center"><em>Estos valores son un
+            estimado, y pueden variar dependiendo de la compensación publicada por Adres,
+            la radicación del prestador y la disponibilidad final de caja de la NUEVA EPS.</em></p>
+        <br>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'radicación por modalidad' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                  <tr>
+                                    <th  class="sticky-column">Descripción</th>
+                                    <th *ngFor="let month of meses; let i = index" 
+                                        [hidden]="!shouldShowMonth(i)">
+                                      {{ month.label }}
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let item of radicacionPorModalidadContrato">
+                                    <td  class="sticky-column" [ngStyle]="{'background-color': getColorByLabel(item.titulo)?.color}">
+                                      {{item.titulo}}
+                                    </td>
+                                    <td *ngFor="let month of meses; let i = index" 
+                                        class="alinearDerecha" 
+                                        [hidden]="!shouldShowMonth(i)">
+                                      {{ item[month.key] | number:'1.0-0' }}
+                                    </td>
+                                  </tr>
+    <!-- Fila de totales solo si hay más de dos filas -->
+                                  <tr *ngIf="radicacionPorModalidadContrato.length > 1">
+                                    <td><strong>Total</strong></td>
+                                    <td *ngFor="let month of meses; let i = index" class="alinearDerecha" [hidden]="!shouldShowMonth(i)">
+                                      {{ getTotalColumn(month.key) | number:'1.0-0' }}
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{'Giros por modalidad' | uppercase }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                              <tr>
+                                <th class="sticky-column">Descripción</th>
+                                <th *ngFor="let month of meses; let i = index" 
+                                    [hidden]="!shouldShowMonth(i)">
+                                  {{ month.label }}
+                                </th>
+                                <th class="alinearDerecha">
+                                 Total concepto
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of girosModalidad">
+                                <td class="sticky-column" [ngStyle]="{'background-color': getColorByLabel(item.Clasificacion)?.color}">
+                                  {{item.descripcion}}
+                                </td>
+                                <td *ngFor="let month of meses; let i = index" 
+                                    class="alinearDerecha" 
+                                    [hidden]="!shouldShowMonth(i)">
+                                  {{ item[month.key] | number:'1.0-0' }}
+                                </td>
+                                <td class="alinearDerecha">
+                                    {{ getTotalRow(item) | number:'1.0-0' }}
+                                  </td>
+                                
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 
 </div>

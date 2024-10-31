@@ -8,70 +8,67 @@
         </div>
         <div class="card-body">
           <!-- Primer Paso -->
-          <form #formPrestador="ngForm" *ngIf="isPrimerPaso" (ngSubmit)="ConsultarSedesPorNIT(formPrestador)">
+          <form #formPrestador="ngForm" *ngIf="isPrimerPaso" (ngSubmit)="login(formPrestador)">
             <div class="mb-3">
               <label for="nit" class="form-label">Ingrese el NIT</label>
-              <input
-                id="nit"
-                name="nit"
-                type="text"
-                class="form-control"
-                ngModel
-                required>
-             
+              <input id="nit" name="nit" type="text" class="form-control" ngModel required>
             </div>
+
             <div class="mb-3">
               <label for="Password" class="form-label">Contraseña</label>
-              <input
-                id="Password"
-                name="Password"
-                type="password"
-                class="form-control"
-                ngModel
-                required>
-            
+              <input id="Password" name="Password" type="password" class="form-control" ngModel required>
             </div>
+
+            <!-- Políticas de Tratamiento de Datos -->
+            <div class="mb-3">
+              <p>
+                Por favor, lea nuestras
+                <a href="#"  (click)="openModal($event)">Políticas de Tratamiento de Datos</a>.
+              </p>
+            </div>
+            <!-- Radio Buttons -->
+            <div class="mb-4 text-center">
+              <label class="me-3">
+                <input type="radio" id="acepta" name="politicas" value="1" ngModel required>
+                <span class="ms-1">Acepto</span>
+              </label>
+              <label>
+                <input type="radio" id="noAcepta" name="politicas" value="0" ngModel required>
+                <span class="ms-1">No acepto</span>
+              </label>
+            </div>
+
             <div class="d-grid gap-2">
               <button class="btn btn-primary" type="submit" [disabled]="formPrestador.invalid">
                 Ingresar
               </button>
-          
             </div>
-          </form>
 
-          <!-- Segundo Paso -->
-          <form #formLogin="ngForm" *ngIf="!isPrimerPaso"  (ngSubmit)="login(formLogin)">
-            <div class="mb-3">
-              <label for="sede" class="form-label">Sede</label>
-              <select
-                id="sede"
-                name="sedea"
-                class="form-select"
-                [(ngModel)]="selectedSede"
-                required>
-                <option *ngFor="let sede of sedes" [ngValue]="sede">{{ sede.name }}</option>
-              </select>
-             
-            </div>
-            <div class="mb-3">
-              <label for="Password" class="form-label">Contraseña</label>
-              <input
-                id="Password"
-                name="Password"
-                type="password"
-                class="form-control"
-                ngModel
-                required>
-            
-            </div>
-            <div class="d-grid gap-2">
-              <button class="btn btn-primary" type="submit" [disabled]="formLogin.invalid">
-                Ingresar
-              </button>
-             
+            <!-- Enlace para Recuperar Contraseña -->
+            <div class="text-center mt-3">
+              <a routerLink="/recuperarContrasena" >¿Olvidó su contraseña?</a>
             </div>
           </form>
+          <!-- Segundo Paso -->
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Politicas de tratamiento de datos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Estas son las póliticas  de tratamientos de datos 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

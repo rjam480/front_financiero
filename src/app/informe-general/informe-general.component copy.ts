@@ -6,19 +6,13 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Config } from 'src/app/config';
 import * as CryptoJS from 'crypto-js'
-import 'chartjs-plugin-annotation';
-type ClasificacionKey = 'CORRIENTE' | 'SIN IDENTIFICAR' | 'ANTERIOR' | 'TOTAL CORRIENTE' | 'TOTAL RADICACION' | 'GIROS';
-interface Pago {
-  valor: string;
-  label: string;
-}
+
+
 @Component({
   selector: 'app-informe-general',
   templateUrl: './informe-general.component.html',
   styleUrls: ['./informe-general.component.scss']
 })
-
-
 export class InformeGeneralComponent implements OnInit {
   promedioRadicacion: any = {};
   private chart: Chart | null = null;  // Add this line
@@ -28,11 +22,6 @@ export class InformeGeneralComponent implements OnInit {
   terceraSeccion: any[] = [];
   total2024: any[] = [];
   intervencionMes: any[] = [];
-  proyeccionGiros: any[] = [];
-  radicacionPorModalidadContrato	: any[] = [];
-  girosModalidad: any[] = [];
-  currentYear: number = new Date().getFullYear();
-  currentMonth = new Date().getMonth(); 
   public isAdmin: boolean=false;
   public isview: boolean=true;
   public role: number=0;
@@ -56,32 +45,12 @@ export class InformeGeneralComponent implements OnInit {
     { key: 'NOV', label: 'noviembre' },
     { key: 'DIC', label: 'Diciembre' },
   ]
-  dataPagos: { [key: string]: string } = {
-    'CORRIENTE':  'Prestación 2024' ,
-    'SIN IDENTIFICAR': 'Radicación por identificar',
-    'ANTERIOR':  'Prestación años anteriores' ,
-    'TOTAL CORRIENTE':'Total prestación 2024' ,
-    'TOTAL RADICACION': 'Total Radicación 2024',
-    'Giros': 'Giros 2024' 
-   
-  };
   colores = [
-    { label: 'CORRIENTE', color: 'rgba(135, 206, 235, 0.6)', borde: 'rgba(135, 206, 235, 1)' },
+    { label: 'hola', color: 'rgba(135, 206, 235, 0.6)', borde: 'rgba(135, 206, 235, 1)' },
     { label: 'SIN IDENTIFICAR', color: 'rgba(255, 206, 86, 0.2)', borde: 'rgba(255, 206, 86, 1)' },
     { label: 'ANTERIOR', color: 'rgba(144, 238, 144, 0.6)', borde: 'rgba(144, 238, 144, 1)' }
 
-  ];
-
-  labels: { [key: string]: string } = {
-    pago_gd_subsidiado: 'Pago GD Subsidiado',
-    gd_contr_i: 'GD Contr I',
-    gd_contr_ii: 'GD Contr II',
-    gd_contr_iii: 'GD Contr III',
-    gd_contr_iv: 'GD Contr IV',
-    otros_giros: 'Otros Giros',
-    pago_por_tesoreria: 'Pago por Tesorería',
-    total_giros: 'Total Giros'
-  };
+  ]
   constructor(private crmApiService: CrmApiService, private config: Config, private authService: AuthService, private router: Router) {
 
   }
@@ -119,9 +88,6 @@ export class InformeGeneralComponent implements OnInit {
         this.total2024 = res.total_2024;
         this.total2024 = res.total_2024;
         this.intervencionMes = res.intervencion_mes;
-        this.proyeccionGiros=res.proyeccionGiros;
-        this.radicacionPorModalidadContrato=res.radicacionPorModalidadContrato
-        this.girosModalidad=res.girosModalidad;
         this.createChart();
         this.promedioRadicacion = {
           //  cxp: res.cabecera[0].cxp,
@@ -173,107 +139,88 @@ export class InformeGeneralComponent implements OnInit {
   private closeLoading() {
     Swal.close();
   }
+
+
   createChart() {
     if (this.chart) {
-        this.chart.destroy();
+      this.chart.destroy();
     }
-
-    const currentMonth = new Date().getMonth(); // Mes actual (0 - 11)
-    const allLabels = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-    const labels = allLabels.slice(0, currentMonth + 1); // Muestra solo hasta el mes actual
+    const labels = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP'];
 
     // Extraer datos para cada clasificación
-    const corriente = this.primeraSeccion.find(item => item.Clasificacion === 'CORRIENTE') || this.getDefaultData('CORRIENTE');
-    const sinIdentificar = this.primeraSeccion.find(item => item.Clasificacion === 'SIN IDENTIFICAR') || this.getDefaultData('SIN IDENTIFICAR');
-    const anterior = this.primeraSeccion.find(item => item.Clasificacion === 'ANTERIOR') || this.getDefaultData('ANTERIOR');
-    const giros = this.segundaSeccion.find(item => item.Clasificacion === 'Giros') || this.getDefaultData('Giros');
+    const corriente = this.primeraSeccion.find(item => item.Clasificacion === 'CORRIENTE') || { Clasificacion: 'CORRIENTE', ENE: 0, FEB: 0, MAR: 0, ABR: 0, MAY: 0, JUN: 0, JUL: 0, AGO: 0, SEP: 0, OCT: 0, NOV: 0, DIC: 0 };
+    const sinIdentificar = this.primeraSeccion.find(item => item.Clasificacion === 'SIN IDENTIFICAR') || { Clasificacion: 'SIN IDENTIFICAR', ENE: 0, FEB: 0, MAR: 0, ABR: 0, MAY: 0, JUN: 0, JUL: 0, AGO: 0, SEP: 0, OCT: 0, NOV: 0, DIC: 0 };
+    const anterior = this.primeraSeccion.find(item => item.Clasificacion === 'ANTERIOR') || { Clasificacion: 'ANTERIOR', ENE: 0, FEB: 0, MAR: 0, ABR: 0, MAY: 0, JUN: 0, JUL: 0, AGO: 0, SEP: 0, OCT: 0, NOV: 0, DIC: 0 };
 
-    // Obtener datos hasta el mes actual
+    const giros = this.segundaSeccion.find(item => item.Clasificacion === 'Giros') || { Clasificacion: 'Giros', ENE: 0, FEB: 0, MAR: 0, ABR: 0, MAY: 0, JUN: 0, JUL: 0, AGO: 0, SEP: 0 };
+
     const dataCorriente = labels.map(label => corriente[label]);
     const dataSinIdentificar = labels.map(label => sinIdentificar[label]);
     const dataAnterior = labels.map(label => anterior[label]);
+    // const trendlineData = this.calculateMovingAverage(dataCorriente, 3);
     const dataGiros = labels.map(label => giros[label]);
+    console.log(dataCorriente);
 
     const colorCorriente = this.getColorByLabel('CORRIENTE');
     const colorSin = this.getColorByLabel('SIN IDENTIFICAR');
     const colorAnterior = this.getColorByLabel('ANTERIOR');
     const ctx = document.getElementById('myChart') as HTMLCanvasElement;
-
     this.chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels, // Solo los meses hasta el actual
-            datasets: [
-                {
-                    label: 'PRESTACION 2024',
-                    data: dataCorriente,
-                    backgroundColor: colorCorriente?.color,
-                    borderColor: colorCorriente?.borde,
-                    borderWidth: 1
-                },
-                {
-                    label: 'RADICACION POR IDENTIFICAR',
-                    data: dataSinIdentificar,
-                    backgroundColor: colorSin?.color,
-                    borderColor: colorSin?.borde,
-                    borderWidth: 1
-                },
-                {
-                    label: 'PRESTACION AÑOS ANTERIORES',
-                    data: dataAnterior,
-                    backgroundColor: colorAnterior?.color,
-                    borderColor: colorAnterior?.borde,
-                    borderWidth: 1
-                },
-                {
-                    label: 'GIROS 2024',
-                    data: dataGiros,
-                    borderColor: 'rgba(255, 0, 0, 1)',
-                    type: 'line',
-                    order: 0
-                },
-                {
-                    label: 'PERIODO DE INTERVENCION',
-                    data: [null, null, null, ...dataGiros.slice(3, currentMonth + 1)], // Solo se mostrará hasta el mes actual
-                    backgroundColor: 'rgba(0, 0, 255, 0.1)', // Color de fondo para la sombra
-                    type: 'line',
-                    fill: true,
-                    borderWidth: 0
-                }
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+      type: 'bar',
+      data: {
+        labels: labels, // Meses como etiquetas
+        datasets: [
+          {
+            label: this.colores[0].label,
+            data: dataCorriente,
+            backgroundColor: colorCorriente?.color, // Azul claro
+            borderColor: colorCorriente?.borde,
+            borderWidth: 1
+          },
+          {
+            label: 'SIN IDENTIFICAR',
+            data: dataSinIdentificar,
+            backgroundColor: colorSin?.color,
+            borderColor: colorSin?.borde,
+            borderWidth: 1
+          },
+          {
+            label: 'ANTERIOR',
+            data: dataAnterior,
+            backgroundColor: colorAnterior?.color, // Verde claro
+            borderColor: colorAnterior?.borde,
+            borderWidth: 1
+          },
+          /*
+          {
+            label: 'Tendencia Polinómica',
+            data: trendlineData,
+            type: 'line',
+            borderColor: 'rgba(255, 0, 0, 1)', // Color de la línea de tendencia
+            fill: false,
+            borderWidth: 2,
+            tension: 0.1 // Para suavizar la línea
+          },*/
+          {
+            label: 'Giros ',
+            data: dataGiros,
+            borderColor: 'rgba(255, 0, 0, 1 )',
+            // backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+            type: 'line',
+            order: 0
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         }
+      }
     });
-}
+  }
 
-// Función para obtener datos predeterminados
-getDefaultData(label: string) {
-    return {
-        Clasificacion: label,
-        ENE: 0,
-        FEB: 0,
-        MAR: 0,
-        ABR: 0,
-        MAY: 0,
-        JUN: 0,
-        JUL: 0,
-        AGO: 0,
-        SEP: 0,
-        OCT: 0,
-        NOV: 0,
-        DIC: 0
-    };
-}
-
-
-
-  
   cerrarSesion() {
     console.log('hola');
     this.authService.logout();
@@ -317,33 +264,7 @@ getDefaultData(label: string) {
     // Devolver el valor como número entero
     return parseInt(decryptedString, 10);
   }
-  getKeys(obj: any): string[] {
-    return Object.keys(obj);
-  }
 
-  shouldShowMonth(index: number): boolean {
-    return index <= this.currentMonth;
-  }
-
-  getLabel(key: string): string {
-    return this.labels[key] || key; // Devuelve la clave si no hay label
-  }
-
-  getClasificacionLabel(key: string): string {
-    return this.dataPagos[key] || key; // Devuelve la clave si no hay label
-  }
-
-  getTotalRow(item: any): number {
-    return this.meses.reduce((total, month, index) => {
-      return total + (this.shouldShowMonth(index) ? (item[month.key] || 0) : 0);
-    }, 0);
-  }
-
-  getTotalColumn(key: string): number {
-    return this.radicacionPorModalidadContrato.reduce((total, item) => {
-      return total + (item[key] || 0);
-    }, 0);
-  }
 
 
 }

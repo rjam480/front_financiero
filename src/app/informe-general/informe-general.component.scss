@@ -38,3 +38,19 @@ table.table-hover tbody tr td:hover {
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+
+.alinearDerecha {
+text-align: right;
+    
+}
+
+
+.sticky-column {
+    position: sticky;
+    left: 0;
+    background-color: #ffffff; /* Fondo blanco para cubrir contenido desplazado */
+    z-index: 1; /* Asegura que la columna esté sobre las demás al desplazarse */
+  //  color:rgba(255, 255, 255, 0);
+  
+  }

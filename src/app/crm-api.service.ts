@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Config } from 'src/app/config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CrmApiService {
-  private apiEndpoint: string = 'http://127.0.0.1:8000/api';
+  public apiEndpoint = this.config.apiEndpoint;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private config: Config) {
    this.loadConfig();
   }
 
@@ -47,7 +48,7 @@ export class CrmApiService {
     if (!this.apiEndpoint) {
       return throwError('API endpoint no está definido.');
     }
-    const url = `${this.apiEndpoint}/ObtenerTokenAutenticacion`;
+    const url = `${this.apiEndpoint}/auth/login`;
     return this.http.post(url,data).pipe(
       catchError(err => {
         console.error('Error al realizar la solicitud:', err);
@@ -62,8 +63,15 @@ export class CrmApiService {
     if (!this.apiEndpoint) {
       return throwError('API endpoint no está definido.');
     }
+    const token = window.sessionStorage.getItem("ACCESS_TOKEN"); // Obtener el token
+    // Crear las cabeceras con el token Bearer
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
     const url = `${this.apiEndpoint}/consulta_financiero/${nit_prestador}`;
-    return this.http.get(url).pipe(
+    return this.http.get(url, { headers }).pipe(
       catchError(err => {
         console.error('Error al realizar la solicitud:', err);
         return throwError(err);
@@ -71,6 +79,35 @@ export class CrmApiService {
     );
   }
 
+
+  recuperarPassword(data: any): Observable<any> {
+    // Asegúrate de que apiEndpoint esté definido antes de realizar la solicitud
+    if (!this.apiEndpoint) {
+      return throwError('API endpoint no está definido.');
+    }
+    const url = `${this.apiEndpoint}/enviar-email`;
+    return this.http.post(url,data).pipe(
+      catchError(err => {
+     //   console.error('Error al realizar la solicitud:', err);
+        return throwError(err);
+      })
+    );
+  }
+
+
+  verificarToken(data: any): Observable<any> {
+    // Asegúrate de que apiEndpoint esté definido antes de realizar la solicitud
+    if (!this.apiEndpoint) {
+      return throwError('API endpoint no está definido.');
+    }
+    const url = `${this.apiEndpoint}/recuperar-password`;
+    return this.http.post(url,data).pipe(
+      catchError(err => {
+       // console.error('Error al realizar la solicitud:', err);
+        return throwError(err);
+      })
+    );
+  }
 
 
 
