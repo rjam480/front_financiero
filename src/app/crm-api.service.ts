@@ -19,7 +19,7 @@ export class CrmApiService {
     return fetch('assets/config.json')
       .then(response => response.json())
       .then(config => {
-        this.apiEndpoint = config.apiEndpoint; // Carga la URL desde config.json
+        this.apiEndpoint =  this.apiEndpoint // Carga la URL desde config.json
       })
       .catch(error => {
         console.error('Error al cargar la configuración:', error);
@@ -109,7 +109,32 @@ export class CrmApiService {
     );
   }
 
+  obtenerPoliticas(): Observable<any> {
+    const url = `${this.apiEndpoint}/politicas`;
+    return this.http.get(url);
+  }
 
+
+  cerrarSesion(): Observable<any> {
+    // Asegúrate de que apiEndpoint esté definido antes de realizar la solicitud
+    if (!this.apiEndpoint) {
+      return throwError('API endpoint no está definido.');
+    }
+    const url = `${this.apiEndpoint}/auth/logout`;
+    const token = window.sessionStorage.getItem("ACCESS_TOKEN"); 
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    console.log(token);
+    return this.http.post(url, {}, { headers }).pipe( // Pasa el objeto headers aquí en lugar del cuerpo
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+  
 
 
 

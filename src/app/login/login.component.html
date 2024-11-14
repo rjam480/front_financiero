@@ -1,10 +1,13 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-7">
       <div class="card">
-        <div class="card-header text-center">
-          <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid" style="max-width: 150px;">
-          <h1 class="mt-3">Información financiera</h1>
+        <div class="">
+          <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid large-header-image"
+            style="width: 100%; max-width: 874px; height: auto;">
+        </div>
+        <div class="info-bar">
+          <span class="info-text">Información financiera</span>
         </div>
         <div class="card-body">
           <!-- Primer Paso -->
@@ -13,17 +16,15 @@
               <label for="nit" class="form-label">Ingrese el NIT</label>
               <input id="nit" name="nit" type="text" class="form-control" ngModel required>
             </div>
-
             <div class="mb-3">
               <label for="Password" class="form-label">Contraseña</label>
               <input id="Password" name="Password" type="password" class="form-control" ngModel required>
             </div>
-
             <!-- Políticas de Tratamiento de Datos -->
             <div class="mb-3">
               <p>
                 Por favor, lea nuestras
-                <a href="#"  (click)="openModal($event)">Políticas de Tratamiento de Datos</a>.
+                <a href="#" (click)="openModal($event)">Políticas de confidencialidad de la información</a>
               </p>
             </div>
             <!-- Radio Buttons -->
@@ -46,10 +47,24 @@
 
             <!-- Enlace para Recuperar Contraseña -->
             <div class="text-center mt-3">
-              <a routerLink="/recuperarContrasena" >¿Olvidó su contraseña?</a>
+              <a routerLink="/recuperarContrasena">¿Olvidó su contraseña?</a>
             </div>
           </form>
-          <!-- Segundo Paso -->
+          <!--
+          <div  class="mt-5">
+            <div class=" footer-bar p-4 d-flex align-items-center">
+              <div class="me-3">
+           
+                <span class="d-block" style="width: 50px;"></span>
+              </div>
+              <div class="ms-auto">
+                <img src="../assets/neps_logoOld.png" alt="Logo Segundo Paso" class="img-fluid" style="max-width: 100px;">
+              </div>
+              
+            </div>
+         
+          </div>
+-->
         </div>
       </div>
     </div>
@@ -57,15 +72,23 @@
 </div>
 
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Politicas de tratamiento de datos</h5>
+      <div class="modal-header d-flex align-items-center">
+        <div class="card-header text-center">
+          <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid large-header-image"
+          style="width: 100%; max-width: 874px; height: auto;">
+            <br>
+          <br>
+          <h5 class="modal-title" id="staticBackdropLabel"> <strong>Políticas de confidencialidad de la
+              información</strong></h5>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Estas son las póliticas  de tratamientos de datos 
+      <div [innerHTML]="politicas" class="modal-body">
+        Estas son Políticas de confidencialidad de la información
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

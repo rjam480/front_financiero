@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component , OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CrmApiService } from '../crm-api.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Config } from 'src/app/config';
-import * as CryptoJS from 'crypto-js'
+import * as CryptoJS from 'crypto-js';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 declare var bootstrap: any; 
 
 @Component({
@@ -13,19 +14,21 @@ declare var bootstrap: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'] // Si estás usando SCSS
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public username: string;
   password: string;
   errorMessage: string;
   public sedes: any = [];
   public isPrimerPaso: boolean;
   public selectedSede: any;
+  politicas: SafeHtml = '';
   //public prestador;
 
   constructor(private authService: AuthService,
     private crmApiService: CrmApiService,
     private config: Config,
     private router: Router,
+    private sanitizer: DomSanitizer,
 
   ) {
     this.username = '';
@@ -42,6 +45,11 @@ export class LoginComponent {
     } else {
       this.errorMessage = 'Por favor, complete todos los campos requeridos.';
     }
+  }
+
+
+  ngOnInit(): void {
+    this.getPolicitas();
   }
 
 
@@ -181,6 +189,18 @@ export class LoginComponent {
       const modal =  new bootstrap.Modal(modalElement);
       modal.show();
     }
+  }
+
+  getPolicitas(): void {
+    this.crmApiService.obtenerPoliticas().subscribe(
+      (response: any) => {
+        // Sanitiza el HTML antes de mostrarlo
+        this.politicas = this.sanitizer.bypassSecurityTrustHtml(response.politicas);
+      },
+      (error) => {
+        console.error('Error al obtener las políticas:', error);
+      }
+    );
   }
   
 }

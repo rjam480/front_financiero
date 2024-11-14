@@ -2,6 +2,9 @@
     <!-- Título principal -->
 
     <div class="row mb-4">
+   
+            <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid large-header-image" style="width: 100%; max-width: 874px; height: auto;">
+   
         <div class="col text-end"> <!-- Clase 'text-end' para alinear a la derecha -->
             <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar Sesión</button>
         </div>
@@ -412,7 +415,7 @@
                                   </tr>
     <!-- Fila de totales solo si hay más de dos filas -->
                                   <tr *ngIf="radicacionPorModalidadContrato.length > 1">
-                                    <td><strong>Total</strong></td>
+                                    <td class="sticky-column"><strong>Total</strong></td>
                                     <td *ngFor="let month of meses; let i = index" class="alinearDerecha" [hidden]="!shouldShowMonth(i)">
                                       {{ getTotalColumn(month.key) | number:'1.0-0' }}
                                     </td>

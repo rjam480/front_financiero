@@ -90,6 +90,8 @@ export class InformeGeneralComponent implements OnInit {
     // this.crmApiService.loadConfig(800084362);
     const nit = sessionStorage.getItem('PRESTADOR');
     const clave = localStorage.getItem('ROL');
+
+
     if (clave) {
       this.role = this.decryptData(clave);
       if(this.role==1){
@@ -136,6 +138,11 @@ export class InformeGeneralComponent implements OnInit {
         this.closeLoading();
       },
       err => {
+        if (err.status==401) {
+          this.showError("",'Sesión caducada. Por favor, inicie sesión nuevamente.');
+          this.router.navigate(['/']);  // Redirige a la ruta de login
+          return;
+        }
         this.closeLoading();
         this.showError("", "Prestador no encontrado");
 
@@ -275,7 +282,6 @@ getDefaultData(label: string) {
 
   
   cerrarSesion() {
-    console.log('hola');
     this.authService.logout();
     this.router.navigate(['/']);
   }

@@ -3,8 +3,9 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header text-center">
-            <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid" style="max-width: 150px;">
-            <h2 class="mt-3">Recuperar contraseña</h2>
+            <img src="../assets/neps_logo.png" alt="Logo Nueva EPS" class="img-fluid large-header-image"
+            style="width: 100%; max-width: 874px; height: auto;">
+                        <h2 class="mt-3">Recuperar contraseña</h2>
           </div>
           <div class="card-body" *ngIf="!tokenValido">
             <form #formRecuperar="ngForm" (ngSubmit)="recuperar(formRecuperar)">

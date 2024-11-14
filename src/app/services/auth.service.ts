@@ -4,6 +4,7 @@ import { Config } from 'src/app/config'; // Ruta correcta a tu Config
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators'; // Asegúrate de importar tap
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { CrmApiService } from '../crm-api.service';
 
 interface AuthResponse {
   return: boolean;
@@ -17,7 +18,7 @@ export class AuthService {
   AUTH_SERVER_ADDRESS: string; // Inicializar en el constructor
   authSubject = new BehaviorSubject<boolean>(false);
 
-  constructor(private httpClient: HttpClient, private config: Config, public jwtHelper: JwtHelperService) {
+  constructor(private httpClient: HttpClient, private config: Config, public jwtHelper: JwtHelperService, private crmApiService: CrmApiService) {
     this.AUTH_SERVER_ADDRESS = this.config.apiEndpoint; // Inicializa aquí
   }
 
@@ -34,12 +35,16 @@ export class AuthService {
   }
 
   async logout() {
-    window.sessionStorage.clear();
-    window.localStorage.clear();
-    this.authSubject.next(false);
-    //window.location.reload();
-
-
+    this.crmApiService.cerrarSesion().subscribe(
+      () => {
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+        this.authSubject.next(false);
+      },
+      (error) => {
+        console.error('Error al cerrar sesión:', error);
+      }
+    );
   }
 
   isLoggedIn() {
@@ -48,26 +53,20 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const token = window.sessionStorage.getItem("ACCESS_TOKEN");
     let expirationTime = window.sessionStorage.getItem("EXPIRES_IN");
-
-    // Validar la existencia del token
     if (!token) {
-        return false; // No hay token
+      return false;
     }
-
-    // Validar la existencia del tiempo de expiración
     if (!expirationTime) {
-        return false; // No hay tiempo de expiración
+      return false;
     }
-
-    // Comprobar si el token ha expirado
     const currentTime = Date.now();
     if (currentTime > parseInt(expirationTime, 10)) {
-        // El token ha expirado
-        this.logout(); // Opcional: cerrar sesión
-        return false;
+      // El token ha expirado
+      this.logout(); // Opcional: cerrar sesión
+      return false;
     }
     return true; // Token válido y no ha expirado
-}
+  }
 
 
   private isValidSanctumToken(token: string | null): boolean {
